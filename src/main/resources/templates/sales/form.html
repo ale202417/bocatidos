@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Order | Bocaditos LLC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar(${activeNav})}"></div>
+    <main class="app-main">
+        <div th:replace="~{fragments/topbar :: topbar(${pageTitle}, ${pageSubtitle})}"></div>
+
+        <section class="panel form-panel">
+            <form th:action="@{/sales}" th:object="${saleOrderForm}" method="post" class="entity-form">
+                <div th:if="${#fields.hasGlobalErrors()}" class="flash-banner field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">Error</div>
+
+                <div class="form-grid">
+                    <label>
+                        <span>Order number</span>
+                        <input type="text" th:field="*{orderNumber}" placeholder="SO-1050">
+                        <small class="field-error" th:if="${#fields.hasErrors('orderNumber')}" th:errors="*{orderNumber}">Error</small>
+                    </label>
+                    <label>
+                        <span>Order date</span>
+                        <input type="date" th:field="*{orderDate}">
+                    </label>
+                    <label>
+                        <span>Partner</span>
+                        <select th:field="*{partnerId}">
+                            <option value="">Select partner</option>
+                            <option th:each="partner : ${formOptions.partners()}" th:value="${partner.id()}" th:text="${partner.label()}">Partner</option>
+                        </select>
+                        <small class="field-error" th:if="${#fields.hasErrors('partnerId')}" th:errors="*{partnerId}">Error</small>
+                    </label>
+                    <label>
+                        <span>Customer</span>
+                        <select th:field="*{customerId}">
+                            <option value="">Walk-in / direct sale</option>
+                            <option th:each="customer : ${formOptions.customers()}" th:value="${customer.id()}" th:text="${customer.label()}">Customer</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Payment status</span>
+                        <select th:field="*{paymentStatus}">
+                            <option th:each="status : ${paymentStatuses}" th:value="${status}" th:text="${status}">UNPAID</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Payment method</span>
+                        <select th:field="*{paymentMethod}">
+                            <option th:each="method : ${paymentMethods}" th:value="${method}" th:text="${method}">CASH</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Discount</span>
+                        <input type="number" min="0" step="0.01" th:field="*{discountAmount}">
+                    </label>
+                    <label>
+                        <span>Amount paid</span>
+                        <input type="number" min="0" step="0.01" th:field="*{amountPaid}">
+                        <small class="field-error" th:if="${#fields.hasErrors('amountPaid')}" th:errors="*{amountPaid}">Error</small>
+                    </label>
+                </div>
+
+                <section class="line-item-section">
+                    <div class="section-toolbar compact">
+                        <div>
+                            <p class="panel-eyebrow">Line items</p>
+                            <h3>Order breakdown</h3>
+                        </div>
+                        <div class="order-totals-preview">
+                            <span>Estimated subtotal</span>
+                            <strong id="subtotalPreview">$0.00</strong>
+                        </div>
+                    </div>
+
+                    <div class="line-item-grid" th:each="item, itemStat : *{items}">
+                        <div class="line-item-card">
+                            <div class="line-item-title">Item <span th:text="${itemStat.index + 1}">1</span></div>
+                            <div class="form-grid three-col">
+                                <label>
+                                    <span>Name</span>
+                                    <input type="text" th:field="*{items[__${itemStat.index}__].itemName}" placeholder="Beef empanadas">
+                                </label>
+                                <label>
+                                    <span>Quantity</span>
+                                    <input class="line-qty" type="number" min="0" th:field="*{items[__${itemStat.index}__].quantity}">
+                                </label>
+                                <label>
+                                    <span>Unit price</span>
+                                    <input class="line-price" type="number" min="0" step="0.01" th:field="*{items[__${itemStat.index}__].unitPrice}">
+                                </label>
+                            </div>
+                            <label class="full-width">
+                                <span>Notes</span>
+                                <input type="text" th:field="*{items[__${itemStat.index}__].notes}" placeholder="Flavor, tray size, event note, etc.">
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <label class="full-width">
+                    <span>Order notes</span>
+                    <textarea th:field="*{notes}" rows="4" placeholder="Pickup window, event details, special packing instructions, or follow-up reminders."></textarea>
+                </label>
+
+                <div class="form-actions">
+                    <a class="secondary-link" th:href="@{/sales}">Cancel</a>
+                    <button class="primary-link" type="submit">Save order</button>
+                </div>
+            </form>
+        </section>
+    </main>
+</div>
+
+<script th:src="@{/js/sales-form.js}"></script>
+</body>
+</html>

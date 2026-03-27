@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partners | Bocaditos LLC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar(${activeNav})}"></div>
+    <main class="app-main">
+        <div th:replace="~{fragments/topbar :: topbar(${pageTitle}, ${pageSubtitle})}"></div>
+
+        <section class="panel">
+            <div class="section-toolbar">
+                <form class="search-form" th:action="@{/partners}" method="get">
+                    <input type="search" name="q" placeholder="Search by first or last name" th:value="${searchQuery}">
+                    <button type="submit">Search</button>
+                </form>
+                <a class="primary-link" th:href="@{/partners/new}">Add partner</a>
+            </div>
+
+            <div class="summary-strip">
+                <article>
+                    <strong th:text="${partners.size()}">0</strong>
+                    <span>Partners tracked</span>
+                </article>
+                <article>
+                    <strong th:text="${#lists.size(partners.?[status.name() == 'ACTIVE'])}">0</strong>
+                    <span>Active partners</span>
+                </article>
+            </div>
+
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th>Partner</th>
+                        <th>Status</th>
+                        <th>Sales</th>
+                        <th>Expenses</th>
+                        <th>Contact</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="partner : ${partners}">
+                        <td>
+                            <a class="table-title" th:href="@{/partners/{id}(id=${partner.id()})}" th:text="${partner.fullName()}">Name</a>
+                            <small th:text="${partner.salesCount()} + ' linked orders'">0 linked orders</small>
+                        </td>
+                        <td><span class="status-badge" th:text="${partner.status()}">ACTIVE</span></td>
+                        <td th:text="${'$' + #numbers.formatDecimal(partner.salesTotal(), 1, 'COMMA', 2, 'POINT')}">$0.00</td>
+                        <td th:text="${'$' + #numbers.formatDecimal(partner.expenseTotal(), 1, 'COMMA', 2, 'POINT')}">$0.00</td>
+                        <td>
+                            <div th:text="${partner.phone()} ?: 'No phone on file'">Phone</div>
+                            <small th:text="${partner.email()} ?: 'No email on file'">Email</small>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(partners)}">
+                        <td colspan="5" class="empty-state">No partners match the current search.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Profile | Bocaditos LLC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar(${activeNav})}"></div>
+    <main class="app-main">
+        <div th:replace="~{fragments/topbar :: topbar(${pageTitle}, ${pageSubtitle})}"></div>
+
+        <div th:if="${flashMessage}" class="flash-banner" th:text="${flashMessage}">Saved</div>
+
+        <section class="detail-grid">
+            <article class="panel">
+                <div class="detail-header">
+                    <div>
+                        <p class="panel-eyebrow">Customer overview</p>
+                        <h3 th:text="${customer.fullName()}">Customer Name</h3>
+                    </div>
+                </div>
+                <div class="info-list">
+                    <div><span>Phone</span><strong th:text="${customer.phone()} ?: 'Not provided'">-</strong></div>
+                    <div><span>Email</span><strong th:text="${customer.email()} ?: 'Not provided'">-</strong></div>
+                    <div><span>Address</span><strong th:text="${customer.address()} ?: 'Not provided'">-</strong></div>
+                </div>
+                <p class="detail-notes" th:text="${customer.notes()} ?: 'No customer notes added yet.'">Notes</p>
+            </article>
+
+            <article class="panel">
+                <p class="panel-eyebrow">Customer summary</p>
+                <div class="summary-metrics">
+                    <div><span>Total orders</span><strong th:text="${customer.orderCount()}">0</strong></div>
+                    <div><span>Lifetime sales</span><strong th:text="${'$' + #numbers.formatDecimal(customer.lifetimeSales(), 1, 'COMMA', 2, 'POINT')}">$0.00</strong></div>
+                </div>
+            </article>
+        </section>
+
+        <section class="panel">
+            <div class="section-toolbar">
+                <div>
+                    <p class="panel-eyebrow">Use case</p>
+                    <h3>Why this profile matters</h3>
+                </div>
+                <a class="secondary-link" th:href="@{/customers}">Back to customers</a>
+            </div>
+            <p class="detail-copy">This customer view is meant to support practical daily work: quick contact lookup, understanding whether the customer is a repeat buyer, and preparing for future order and balance tracking screens.</p>
+        </section>
+    </main>
+</div>
+</body>
+</html>

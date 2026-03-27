@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Partner | Bocaditos LLC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar(${activeNav})}"></div>
+    <main class="app-main">
+        <div th:replace="~{fragments/topbar :: topbar(${pageTitle}, ${pageSubtitle})}"></div>
+
+        <section class="panel form-panel">
+            <form th:action="@{/partners}" th:object="${partnerForm}" method="post" class="entity-form">
+                <div class="form-grid">
+                    <label>
+                        <span>First name</span>
+                        <input type="text" th:field="*{firstName}" placeholder="Rosa">
+                        <small class="field-error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Error</small>
+                    </label>
+                    <label>
+                        <span>Last name</span>
+                        <input type="text" th:field="*{lastName}" placeholder="Martinez">
+                        <small class="field-error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Error</small>
+                    </label>
+                    <label>
+                        <span>Phone</span>
+                        <input type="text" th:field="*{phone}" placeholder="(555) 555-0123">
+                    </label>
+                    <label>
+                        <span>Email</span>
+                        <input type="email" th:field="*{email}" placeholder="partner@bocaditos.com">
+                        <small class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</small>
+                    </label>
+                    <label>
+                        <span>Status</span>
+                        <select th:field="*{status}">
+                            <option th:each="status : ${statuses}" th:value="${status}" th:text="${status}">ACTIVE</option>
+                        </select>
+                    </label>
+                </div>
+                <label class="full-width">
+                    <span>Notes</span>
+                    <textarea th:field="*{notes}" rows="5" placeholder="What does this partner mainly handle?"></textarea>
+                </label>
+                <div class="form-actions">
+                    <a class="secondary-link" th:href="@{/partners}">Cancel</a>
+                    <button class="primary-link" type="submit">Save partner</button>
+                </div>
+            </form>
+        </section>
+    </main>
+</div>
+</body>
+</html>

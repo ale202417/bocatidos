@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<header th:fragment="topbar(pageTitle, pageSubtitle)" class="topbar">
+    <div>
+        <p class="page-eyebrow">Internal operations</p>
+        <h2 th:text="${pageTitle}">Page Title</h2>
+        <p class="page-subtitle" th:text="${pageSubtitle}">Page subtitle</p>
+    </div>
+    <div class="topbar-actions">
+        <div class="date-chip">Week of Mar 27, 2026</div>
+        <button class="primary-action" type="button">New record</button>
+    </div>
+</header>
+</body>
+</html>

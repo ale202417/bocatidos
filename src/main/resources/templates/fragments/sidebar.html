@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<aside th:fragment="sidebar(activeNav)" class="app-sidebar">
+    <div class="brand-block">
+        <div class="brand-mark">B</div>
+        <div>
+            <p class="brand-eyebrow">Bocaditos LLC</p>
+            <h1>Operations Hub</h1>
+        </div>
+    </div>
+
+    <nav class="sidebar-nav">
+        <a th:classappend="${activeNav == 'dashboard'} ? ' active'" th:href="@{/dashboard}">
+            <span>Dashboard</span>
+            <small>KPIs & trends</small>
+        </a>
+        <a th:classappend="${activeNav == 'partners'} ? ' active'" th:href="@{/partners}">
+            <span>Partners</span>
+            <small>Socios & balances</small>
+        </a>
+        <a th:classappend="${activeNav == 'customers'} ? ' active'" th:href="@{/customers}">
+            <span>Customers</span>
+            <small>Contacts & history</small>
+        </a>
+        <a th:classappend="${activeNav == 'sales'} ? ' active'" th:href="@{/sales}">
+            <span>Orders & Sales</span>
+            <small>Revenue & payments</small>
+        </a>
+        <a th:classappend="${activeNav == 'expenses'} ? ' active'" href="#">
+            <span>Expenses</span>
+            <small>Costs & reimbursements</small>
+        </a>
+        <a th:classappend="${activeNav == 'production'} ? ' active'" href="#">
+            <span>Production</span>
+            <small>Sessions & efficiency</small>
+        </a>
+        <a th:classappend="${activeNav == 'reports'} ? ' active'" href="#">
+            <span>Reports</span>
+            <small>Business summaries</small>
+        </a>
+    </nav>
+</aside>
+</body>
+</html>
