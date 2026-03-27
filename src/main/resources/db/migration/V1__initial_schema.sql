@@ -35,7 +35,7 @@ CREATE TABLE production_workers (
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     full_name VARCHAR(140) NOT NULL,
     default_hourly_rate DECIMAL(10, 2) NOT NULL,
-    active BIT NOT NULL DEFAULT b'1'
+    active BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 CREATE TABLE sale_orders (

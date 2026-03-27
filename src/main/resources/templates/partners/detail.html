@@ -50,7 +50,12 @@
                     <p class="panel-eyebrow">Manager note</p>
                     <h3>Why this profile matters</h3>
                 </div>
-                <a class="secondary-link" th:href="@{/partners}">Back to partners</a>
+                <div class="form-actions">
+                    <a class="secondary-link" th:href="@{/partners}">Back to partners</a>
+                    <form th:action="@{/partners/{id}/delete(id=${partner.id()})}" method="post">
+                        <button class="danger-link" type="submit">Delete partner</button>
+                    </form>
+                </div>
             </div>
             <p class="detail-copy">This profile is designed to surface the business context you usually need in conversation: who the partner is, how much sales activity is linked to them, and how much reimbursable or business spending has been assigned under their name.</p>
         </section>

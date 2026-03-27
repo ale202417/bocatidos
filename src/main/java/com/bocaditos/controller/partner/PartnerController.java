@@ -73,4 +73,16 @@ public class PartnerController {
         model.addAttribute("partner", partnerService.getPartner(id));
         return "partners/detail";
     }
+
+    @PostMapping("/{id}/delete")
+    public String deletePartner(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            partnerService.deletePartner(id);
+            redirectAttributes.addFlashAttribute("flashMessage", "Partner deleted successfully.");
+            return "redirect:/partners";
+        } catch (IllegalStateException ex) {
+            redirectAttributes.addFlashAttribute("flashMessage", ex.getMessage());
+            return "redirect:/partners/" + id;
+        }
+    }
 }

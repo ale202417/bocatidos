@@ -75,6 +75,20 @@ public class PartnerService {
         return partnerRepository.save(partner);
     }
 
+    @Transactional
+    public void deletePartner(Long id) {
+        Partner partner = partnerRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Partner not found"));
+
+        boolean hasLinkedSales = saleOrderRepository.countByPartnerId(id) > 0;
+        boolean hasLinkedExpenses = expenseRepository.sumAmountByPartnerId(id).compareTo(BigDecimal.ZERO) > 0;
+        if (hasLinkedSales || hasLinkedExpenses) {
+            throw new IllegalStateException("This partner cannot be deleted because linked sales or expenses already exist.");
+        }
+
+        partnerRepository.delete(partner);
+    }
+
     public PartnerForm emptyForm() {
         return new PartnerForm();
     }
