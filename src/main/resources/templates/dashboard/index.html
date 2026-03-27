@@ -56,14 +56,16 @@
             <article class="panel">
                 <div class="panel-header">
                     <div>
-                        <p class="panel-eyebrow">Operational focus</p>
-                        <h3>Today's priorities</h3>
+                        <p class="panel-eyebrow">Customer momentum</p>
+                        <h3>Top customers</h3>
                     </div>
                 </div>
-                <ul class="clean-list">
-                    <li>Reconcile 4 partially paid orders before end of day.</li>
-                    <li>Review production output against labor cost after afternoon shift.</li>
-                    <li>Confirm ingredient purchases entered under the correct categories.</li>
+                <ul class="metric-list">
+                    <li th:each="customer : ${dashboard.topCustomers()}">
+                        <strong th:text="${customer.label()}">Customer</strong>
+                        <span th:text="${customer.value()}">$0.00</span>
+                        <small th:text="${customer.helperText()}">Helper</small>
+                    </li>
                 </ul>
             </article>
 
@@ -75,9 +77,10 @@
                     </div>
                 </div>
                 <ul class="activity-list">
-                    <li><strong>Order #SO-1048</strong><span>Paid in full by walk-in customer</span></li>
-                    <li><strong>Production session</strong><span>128 units completed in 3.5 hours</span></li>
-                    <li><strong>Expense logged</strong><span>$86 packaging restock assigned to Rosa</span></li>
+                    <li th:each="activity : ${dashboard.recentActivity()}">
+                        <strong th:text="${activity.title()}">Activity</strong>
+                        <span th:text="${activity.description()}">Description</span>
+                    </li>
                 </ul>
             </article>
         </section>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Detail | Bocaditos LLC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar(${activeNav})}"></div>
+    <main class="app-main">
+        <div th:replace="~{fragments/topbar :: topbar(${pageTitle}, ${pageSubtitle})}"></div>
+        <div th:if="${flashMessage}" class="flash-banner" th:text="${flashMessage}">Saved</div>
+        <section class="detail-grid">
+            <article class="panel">
+                <div class="detail-header">
+                    <div><p class="panel-eyebrow">Expense overview</p><h3 th:text="${expense.description()}">Description</h3></div>
+                    <span class="status-badge" th:classappend="${expense.type().name() == 'REIMBURSEMENT'} ? ' partial' : ' paid'" th:text="${expense.type()}">BUSINESS_EXPENSE</span>
+                </div>
+                <div class="info-list">
+                    <div><span>Date</span><strong th:text="${#temporals.format(expense.expenseDate(), 'MMM dd, yyyy')}">-</strong></div>
+                    <div><span>Category</span><strong th:text="${expense.categoryName()}">-</strong></div>
+                    <div><span>Partner</span><strong th:text="${expense.partnerName()}">-</strong></div>
+                    <div><span>Amount</span><strong th:text="${'$' + #numbers.formatDecimal(expense.amount(), 1, 'COMMA', 2, 'POINT')}">$0.00</strong></div>
+                </div>
+                <p class="detail-notes" th:text="${expense.notes()} ?: 'No extra notes for this expense.'">Notes</p>
+            </article>
+            <article class="panel">
+                <p class="panel-eyebrow">Actions</p>
+                <div class="form-actions">
+                    <a class="secondary-link" th:href="@{/expenses}">Back to expenses</a>
+                    <form th:action="@{/expenses/{id}/delete(id=${expense.id()})}" method="post">
+                        <button class="danger-link" type="submit">Delete expense</button>
+                    </form>
+                </div>
+            </article>
+        </section>
+    </main>
+</div>
+</body>
+</html>

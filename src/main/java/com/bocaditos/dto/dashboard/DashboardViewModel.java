@@ -7,6 +7,8 @@ public record DashboardViewModel(
         List<String> salesTrendLabels,
         List<Integer> salesTrendValues,
         List<String> expenseBreakdownLabels,
-        List<Integer> expenseBreakdownValues
+        List<Integer> expenseBreakdownValues,
+        List<DashboardRankedItem> topCustomers,
+        List<DashboardActivityItem> recentActivity
 ) {
 }

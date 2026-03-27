@@ -77,6 +77,13 @@ public class SalesController {
         return "sales/detail";
     }
 
+    @PostMapping("/{id}/delete")
+    public String deleteOrder(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        salesService.deleteOrder(id);
+        redirectAttributes.addFlashAttribute("flashMessage", "Order deleted successfully.");
+        return "redirect:/sales";
+    }
+
     private void configureFormPage(Model model, SaleOrderForm form) {
         model.addAttribute("pageTitle", "New Order");
         model.addAttribute("pageSubtitle", "Record a sale with line items, payment progress, and customer context.");

@@ -14,6 +14,7 @@
     <div th:replace="~{fragments/sidebar :: sidebar(${activeNav})}"></div>
     <main class="app-main">
         <div th:replace="~{fragments/topbar :: topbar(${pageTitle}, ${pageSubtitle})}"></div>
+        <div th:if="${flashMessage}" class="flash-banner" th:text="${flashMessage}">Saved</div>
 
         <section class="panel">
             <div class="section-toolbar">

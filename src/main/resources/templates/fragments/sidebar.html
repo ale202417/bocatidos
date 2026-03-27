@@ -27,15 +27,15 @@
             <span>Orders & Sales</span>
             <small>Revenue & payments</small>
         </a>
-        <a th:classappend="${activeNav == 'expenses'} ? ' active'" href="#">
+        <a th:classappend="${activeNav == 'expenses'} ? ' active'" th:href="@{/expenses}">
             <span>Expenses</span>
             <small>Costs & reimbursements</small>
         </a>
-        <a th:classappend="${activeNav == 'production'} ? ' active'" href="#">
+        <a th:classappend="${activeNav == 'production'} ? ' active'" th:href="@{/production}">
             <span>Production</span>
             <small>Sessions & efficiency</small>
         </a>
-        <a th:classappend="${activeNav == 'reports'} ? ' active'" href="#">
+        <a th:classappend="${activeNav == 'reports'} ? ' active'" th:href="@{/reports}">
             <span>Reports</span>
             <small>Business summaries</small>
         </a>

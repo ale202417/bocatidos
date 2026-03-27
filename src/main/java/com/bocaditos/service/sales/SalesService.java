@@ -180,6 +180,14 @@ public class SalesService {
         return saleOrderRepository.save(order);
     }
 
+    @Transactional
+    public void deleteOrder(Long id) {
+        if (!saleOrderRepository.existsById(id)) {
+            throw new EntityNotFoundException("Sale order not found");
+        }
+        saleOrderRepository.deleteById(id);
+    }
+
     private List<SaleOrderFormItem> defaultEmptyItems() {
         List<SaleOrderFormItem> items = new ArrayList<>();
         for (int i = 0; i < DEFAULT_ITEM_ROWS; i++) {

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expenses | Bocaditos LLC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar(${activeNav})}"></div>
+    <main class="app-main">
+        <div th:replace="~{fragments/topbar :: topbar(${pageTitle}, ${pageSubtitle})}"></div>
+        <div th:if="${flashMessage}" class="flash-banner" th:text="${flashMessage}">Saved</div>
+        <section class="panel">
+            <div class="section-toolbar">
+                <form class="filter-form" th:action="@{/expenses}" method="get">
+                    <select name="type">
+                        <option value="">All types</option>
+                        <option th:each="type : ${types}" th:value="${type}" th:selected="${filter.type != null and filter.type.name() == type.name()}" th:text="${type}">BUSINESS_EXPENSE</option>
+                    </select>
+                    <select name="categoryId">
+                        <option value="">All categories</option>
+                        <option th:each="category : ${categories}" th:value="${category.id()}" th:selected="${filter.categoryId != null and filter.categoryId == category.id()}" th:text="${category.label()}">Ingredients</option>
+                    </select>
+                    <input type="date" name="startDate" th:value="${filter.startDate}">
+                    <input type="date" name="endDate" th:value="${filter.endDate}">
+                    <button type="submit">Apply</button>
+                </form>
+                <a class="primary-link" th:href="@{/expenses/new}">New expense</a>
+            </div>
+            <div class="summary-strip">
+                <article><strong th:text="${'$' + #numbers.formatDecimal(summary.totalExpenses(), 1, 'COMMA', 2, 'POINT')}">$0.00</strong><span>Total in view</span></article>
+                <article><strong th:text="${summary.businessExpenseCount()}">0</strong><span>Business expenses</span></article>
+                <article><strong th:text="${summary.reimbursementCount()}">0</strong><span>Reimbursements</span></article>
+            </div>
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Partner</th><th>Type</th><th>Amount</th></tr></thead>
+                    <tbody>
+                    <tr th:each="expense : ${expenses}">
+                        <td th:text="${#temporals.format(expense.expenseDate(), 'MMM dd, yyyy')}">Mar 27, 2026</td>
+                        <td><a class="table-title" th:href="@{/expenses/{id}(id=${expense.id()})}" th:text="${expense.description()}">Description</a></td>
+                        <td th:text="${expense.categoryName()}">Category</td>
+                        <td th:text="${expense.partnerName()}">Partner</td>
+                        <td><span class="status-badge" th:classappend="${expense.type().name() == 'REIMBURSEMENT'} ? ' partial' : ' paid'" th:text="${expense.type()}">BUSINESS_EXPENSE</span></td>
+                        <td th:text="${'$' + #numbers.formatDecimal(expense.amount(), 1, 'COMMA', 2, 'POINT')}">$0.00</td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(expenses)}"><td colspan="6" class="empty-state">No expenses match the selected filters.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

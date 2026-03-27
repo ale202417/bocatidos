@@ -53,7 +53,12 @@
                     <p class="panel-eyebrow">Line items</p>
                     <h3>What was sold</h3>
                 </div>
-                <a class="secondary-link" th:href="@{/sales}">Back to orders</a>
+                <div class="form-actions">
+                    <a class="secondary-link" th:href="@{/sales}">Back to orders</a>
+                    <form th:action="@{/sales/{id}/delete(id=${order.id()})}" method="post">
+                        <button class="danger-link" type="submit">Delete order</button>
+                    </form>
+                </div>
             </div>
             <div class="table-wrap">
                 <table class="data-table">

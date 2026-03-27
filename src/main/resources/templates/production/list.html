@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production | Bocaditos LLC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar(${activeNav})}"></div>
+    <main class="app-main">
+        <div th:replace="~{fragments/topbar :: topbar(${pageTitle}, ${pageSubtitle})}"></div>
+        <div th:if="${flashMessage}" class="flash-banner" th:text="${flashMessage}">Saved</div>
+        <section class="panel">
+            <div class="section-toolbar">
+                <form class="filter-form" th:action="@{/production}" method="get">
+                    <input type="date" name="startDate" th:value="${filter.startDate}">
+                    <input type="date" name="endDate" th:value="${filter.endDate}">
+                    <button type="submit">Apply</button>
+                </form>
+                <a class="primary-link" th:href="@{/production/new}">New session</a>
+            </div>
+            <div class="summary-strip">
+                <article><strong th:text="${summary.totalUnits()}">0</strong><span>Total units</span></article>
+                <article><strong th:text="${summary.totalLaborHours()}">0.00</strong><span>Labor hours</span></article>
+                <article><strong th:text="${summary.avgUnitsPerHour()}">0.00</strong><span>Avg units/hour</span></article>
+                <article><strong th:text="${'$' + #numbers.formatDecimal(summary.totalLaborCost(), 1, 'COMMA', 2, 'POINT')}">$0.00</strong><span>Labor cost</span></article>
+            </div>
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead><tr><th>Date</th><th>Window</th><th>Units</th><th>Labor hours</th><th>Units/hour</th><th>Labor cost</th></tr></thead>
+                    <tbody>
+                    <tr th:each="session : ${sessions}">
+                        <td><a class="table-title" th:href="@{/production/{id}(id=${session.id()})}" th:text="${#temporals.format(session.productionDate(), 'MMM dd, yyyy')}">Date</a></td>
+                        <td th:text="${session.sessionWindow()}">8:00 - 12:00</td>
+                        <td th:text="${session.unitsProduced()}">0</td>
+                        <td th:text="${session.laborHours()}">0.00</td>
+                        <td th:text="${session.unitsPerHour()}">0.00</td>
+                        <td th:text="${'$' + #numbers.formatDecimal(session.laborCost(), 1, 'COMMA', 2, 'POINT')}">$0.00</td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(sessions)}"><td colspan="6" class="empty-state">No production sessions match the selected dates.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Expense | Bocaditos LLC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar(${activeNav})}"></div>
+    <main class="app-main">
+        <div th:replace="~{fragments/topbar :: topbar(${pageTitle}, ${pageSubtitle})}"></div>
+        <section class="panel form-panel">
+            <form th:action="@{/expenses}" th:object="${expenseForm}" method="post" class="entity-form">
+                <div class="form-grid">
+                    <label><span>Date</span><input type="date" th:field="*{expenseDate}"></label>
+                    <label><span>Amount</span><input type="number" min="0.01" step="0.01" th:field="*{amount}"><small class="field-error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Error</small></label>
+                    <label><span>Category</span><select th:field="*{categoryId}"><option value="">Select category</option><option th:each="category : ${formOptions.categories()}" th:value="${category.id()}" th:text="${category.label()}">Category</option></select><small class="field-error" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}">Error</small></label>
+                    <label><span>Partner</span><select th:field="*{partnerId}"><option value="">Shared / business-wide</option><option th:each="partner : ${formOptions.partners()}" th:value="${partner.id()}" th:text="${partner.label()}">Partner</option></select></label>
+                    <label><span>Type</span><select th:field="*{type}"><option th:each="type : ${types}" th:value="${type}" th:text="${type}">BUSINESS_EXPENSE</option></select></label>
+                    <label><span>Description</span><input type="text" th:field="*{description}" placeholder="Packaging supplies"><small class="field-error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Error</small></label>
+                </div>
+                <label class="full-width"><span>Notes</span><textarea th:field="*{notes}" rows="4" placeholder="Receipt details, approval note, or supplier context."></textarea></label>
+                <div class="form-actions"><a class="secondary-link" th:href="@{/expenses}">Cancel</a><button class="primary-link" type="submit">Save expense</button></div>
+            </form>
+        </section>
+    </main>
+</div>
+</body>
+</html>

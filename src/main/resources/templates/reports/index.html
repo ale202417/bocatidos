@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports | Bocaditos LLC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar(${activeNav})}"></div>
+    <main class="app-main">
+        <div th:replace="~{fragments/topbar :: topbar(${pageTitle}, ${pageSubtitle})}"></div>
+        <section class="panel">
+            <form class="filter-form" th:action="@{/reports}" method="get">
+                <input type="date" name="startDate" th:value="${filter.startDate}">
+                <input type="date" name="endDate" th:value="${filter.endDate}">
+                <button type="submit">Apply</button>
+            </form>
+            <div class="summary-strip">
+                <article><strong th:text="${reports.salesTotal()}">$0.00</strong><span>Sales total</span></article>
+                <article><strong th:text="${reports.expenseTotal()}">$0.00</strong><span>Expense total</span></article>
+                <article><strong th:text="${reports.netOperatingPosition()}">$0.00</strong><span>Net operating position</span></article>
+            </div>
+        </section>
+
+        <section class="content-grid report-grid">
+            <article class="panel"><div class="section-toolbar compact"><div><p class="panel-eyebrow">Partners</p><h3>Partner sales summary</h3></div></div><ul class="metric-list"><li th:each="line : ${reports.partnerSummary()}"><strong th:text="${line.label()}">Label</strong><span th:text="${line.value()}">Value</span><small th:text="${line.secondaryValue()}">Meta</small></li></ul></article>
+            <article class="panel"><div class="section-toolbar compact"><div><p class="panel-eyebrow">Customers</p><h3>Customer sales summary</h3></div></div><ul class="metric-list"><li th:each="line : ${reports.customerSummary()}"><strong th:text="${line.label()}">Label</strong><span th:text="${line.value()}">Value</span><small th:text="${line.secondaryValue()}">Meta</small></li></ul></article>
+        </section>
+        <section class="content-grid report-grid">
+            <article class="panel"><div class="section-toolbar compact"><div><p class="panel-eyebrow">Expenses</p><h3>Spend by category</h3></div></div><ul class="metric-list"><li th:each="line : ${reports.expenseByCategory()}"><strong th:text="${line.label()}">Label</strong><span th:text="${line.value()}">Value</span><small th:text="${line.secondaryValue()}">Meta</small></li></ul></article>
+            <article class="panel"><div class="section-toolbar compact"><div><p class="panel-eyebrow">Production</p><h3>Efficiency snapshots</h3></div></div><ul class="metric-list"><li th:each="line : ${reports.productionEfficiency()}"><strong th:text="${line.label()}">Label</strong><span th:text="${line.value()}">Value</span><small th:text="${line.secondaryValue()}">Meta</small></li></ul></article>
+        </section>
+    </main>
+</div>
+</body>
+</html>
